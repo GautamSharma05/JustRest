@@ -1,6 +1,6 @@
 # justrest
 
-A new Flutter project.
+JustRest is a company founded by Gautam Sharma with Co-founder Bhavesh Khatri in August 2021 with a goal to make people's life easy by providing All types of Home services sitting at your home.
 
 ## Getting Started
 
