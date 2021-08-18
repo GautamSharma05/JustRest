@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "363568539296",
+    "project_id": "justrest-db9a3",
+    "storage_bucket": "justrest-db9a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363568539296:android:48c493274b83f44aec4bc5",
+        "android_client_info": {
+          "package_name": "com.example.justrest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363568539296-7c3bb9m91nfl35677fh155s6bap9k16p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.justrest",
+            "certificate_hash": "6c40b9d8f0ad0e74ba81d034b718ba1536020c27"
+          }
+        },
+        {
+          "client_id": "363568539296-h82rq9b6isnju42if1c3rhckqi38ovem.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwmpBP7e8KXaE6s4O10yGat3Pym1PbHlo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363568539296-h82rq9b6isnju42if1c3rhckqi38ovem.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
