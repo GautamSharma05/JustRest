@@ -33,11 +33,16 @@ class _CustomCarouselState extends State<CustomCarousel> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   urlImages = snapshot.data!.get('Sliders');
                 }
+                else{
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
                 return CarouselSlider.builder(
                     itemCount: urlImages.length,
                     itemBuilder: (context, index, realIndex) {
                       final urlImage = urlImages[index];
-                      return buildImage(urlImage, index);
+                      return buildImage(urlImage);
                     },
                     options: CarouselOptions(
                         height: 300.0,
@@ -58,7 +63,7 @@ class _CustomCarouselState extends State<CustomCarousel> {
     );
   }
 
-  Widget buildImage(String urlImage, int index) {
+  Widget buildImage(String urlImage) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 8.0),
       width: double.infinity,
