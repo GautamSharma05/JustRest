@@ -36,7 +36,7 @@ class _MyDrawerState extends State<MyDrawer> {
               textScaleFactor: 1.2,
             ),
             onTap: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => MyHomePage())),
+                context, MaterialPageRoute(builder: (context) => HomeScreen())),
           ),
           ListTile(
             leading: Icon(Icons.alarm_on),

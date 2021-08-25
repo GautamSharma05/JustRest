@@ -3,14 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:justrest/Widgets/CustomCarousel.dart';
 import 'package:justrest/Widgets/MyDrawer.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   static const keveryTextColor = TextStyle(
     fontSize: 14.0,
     fontWeight: FontWeight.w400,
@@ -18,9 +18,9 @@ class _MyHomePageState extends State<MyHomePage> {
   );
 
   static const keveryBackText = TextStyle(
-      fontSize: 15.0,
-      fontWeight: FontWeight.w500,
-      );
+    fontSize: 15.0,
+    fontWeight: FontWeight.w500,
+  );
 
   static const sizedBoxSpace = SizedBox(
     height: 12,
@@ -228,7 +228,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(
                       height: 20,
                     ),
-
                     Row(
                       children: [
                         Expanded(
