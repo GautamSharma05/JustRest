@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:justrest/Screens/AboutUs.dart';
 import 'package:justrest/Screens/HomeScreen.dart';
+import 'package:justrest/Screens/LoginScreen.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -65,14 +67,13 @@ class _MyDrawerState extends State<MyDrawer> {
                 subject: 'Look what I made!'),
           ),
           ListTile(
-            leading: Icon(Icons.info),
-            title: Text(
-              'About us',
-              textScaleFactor: 1.2,
-            ),
-            onTap: () =>  Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AboutUs()))
-          ),
+              leading: Icon(Icons.info),
+              title: Text(
+                'About us',
+                textScaleFactor: 1.2,
+              ),
+              onTap: () => Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => AboutUs()))),
           ListTile(
             leading: Icon(Icons.privacy_tip),
             title: Text(
@@ -87,7 +88,11 @@ class _MyDrawerState extends State<MyDrawer> {
                 'Log Out',
                 textScaleFactor: 1.2,
               ),
-              onTap: () {}),
+              onTap: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
+              }),
         ],
       ),
     );

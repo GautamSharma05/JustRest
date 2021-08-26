@@ -27,6 +27,7 @@ dependencies:
   carousel_slider:
   firebase_core:
   cloud_firestore:
+  pin_code_fields:
   firebase_auth:
   
 
