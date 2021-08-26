@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   String verificationId = "";
   String otp = '';
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneController = TextEditingController();
   bool showLoading = false;
@@ -51,154 +52,167 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   getMobileFormWidget(context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 80,
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: Text(
-            'Login / SignUp',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 50,
           ),
-        ),
-        Container(
-          margin: EdgeInsets.all(40.0),
-          width: double.infinity,
-          height: 50,
-          decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-          child: Form(
-            key: _formKey,
-            child: Row(
-              children: [
-                CountryCodePicker(
-                  initialSelection: 'IN',
-                  enabled: false,
-                ),
-                Container(
-                    width: 130,
-                    child: TextField(
-                      controller: _phoneController,
-                      autofocus: true,
-                      maxLength: 10,
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        counterText: '',
-                        hintText: 'Mobile Number',
-                      ),
-                    ))
-              ],
+          Image.asset('assets/images/sendMobileOtp.png'),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              'Login / SignUp',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
           ),
-        ),
-        Expanded(
-          child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        showLoading = true;
-                      });
-                      await _auth.verifyPhoneNumber(
-                          phoneNumber: "+91" + _phoneController.text,
-                          verificationCompleted: (phoneAuthCredential) {
-                            setState(() {
-                              showLoading = false;
-                            });
-                            //signInWithPhoneAuthCredential(phoneAuthCredential);
-                          },
-                          verificationFailed: (verificationFailed) async {
-                            setState(() {
-                              showLoading = false;
-                            });
-                            scaffoldMessengerKey.currentState!.showSnackBar(
-                                SnackBar(
-                                    content: Text((verificationFailed.message)
-                                        .toString())));
-                          },
-                          codeSent: (verificationId, resendToken) {
-                            setState(() {
-                              showLoading = false;
-                              currentState =
-                                  MobileVerificationState.SHOW_OTP_FORM_STATE;
-                              this.verificationId = verificationId;
-                            });
-                          },
-                          codeAutoRetrievalTimeout: (verificationId) {});
-                    },
-                    child: Text('Login / SignUp'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blueGrey[900],
-                    ),
+          Container(
+            margin: EdgeInsets.all(40.0),
+            width: double.infinity,
+            height: 50,
+            decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+            child: Form(
+              key: _formKey,
+              child: Row(
+                children: [
+                  CountryCodePicker(
+                    initialSelection: 'IN',
+                    enabled: false,
                   ),
+                  Container(
+                      width: 130,
+                      child: TextFormField(
+                        controller: _phoneController,
+                        autofocus: true,
+                        maxLength: 10,
+                        validator: (value) {
+                          if (value!.isEmpty || value.length < 10) {
+                            return "Mobile number cannot be empty";
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          counterText: '',
+                          hintText: 'Mobile Number',
+                          //errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                        ),
+                      ))
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      showLoading = true;
+                    });
+                  }
+                  await _auth.verifyPhoneNumber(
+                      phoneNumber: "+91" + _phoneController.text,
+                      verificationCompleted: (phoneAuthCredential) {
+                        setState(() {
+                          showLoading = false;
+                        });
+                        //signInWithPhoneAuthCredential(phoneAuthCredential);
+                      },
+                      verificationFailed: (verificationFailed) async {
+                        setState(() {
+                          showLoading = false;
+                        });
+                        scaffoldMessengerKey.currentState!.showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    (verificationFailed.message).toString())));
+                      },
+                      codeSent: (verificationId, resendToken) {
+                        setState(() {
+                          showLoading = false;
+                          currentState =
+                              MobileVerificationState.SHOW_OTP_FORM_STATE;
+                          this.verificationId = verificationId;
+                        });
+                      },
+                      codeAutoRetrievalTimeout: (verificationId) {});
+                },
+                child: Text('Login / SignUp'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blueGrey[900],
                 ),
-              )),
-        )
-      ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
   getOtpFormWidget(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: 80,
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: RichText(
-            text: TextSpan(
-                text: 'Enter verification code',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                children: <TextSpan>[
-                  TextSpan(
-                      text: 'We have sent you a 4 digit verification code on'),
-                  TextSpan(text: '+91' + _phoneController.text)
-                ]),
-          ),
-        ),
-        PinCodeTextField(
-          appContext: context,
-          length: 6,
-          onChanged: (value) {},
-          pinTheme: PinTheme(
-              shape: PinCodeFieldShape.box,
-              borderRadius: BorderRadius.circular(5),
-              fieldHeight: 50,
-              fieldWidth: 40,
-              inactiveColor: Colors.blueGrey[900],
-              activeColor: Colors.orange),
-          onCompleted: (value) {
-            otp = value;
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: double.infinity,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
             height: 50,
-            child: ElevatedButton(
-              onPressed: () {
-                PhoneAuthCredential phoneAuthCredential =
-                    PhoneAuthProvider.credential(
-                        verificationId: verificationId, smsCode: otp);
-                signInWithPhoneAuthCredential(phoneAuthCredential);
+          ),
+          Image.asset('assets/images/otp.png'),
+          Text(
+            'Enter verification code',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          Text(
+            'We have sent you a 6 digit verification code on',
+            style: TextStyle(color: Colors.grey[600]),
+          ),
+          Text(
+            "+918854082108",
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: PinCodeTextField(
+              appContext: context,
+              length: 6,
+              onChanged: (value) {},
+              pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(5),
+                  fieldHeight: 50,
+                  fieldWidth: 40,
+                  inactiveColor: Colors.blueGrey[900],
+                  activeColor: Colors.orange),
+              onCompleted: (value) {
+                otp = value;
               },
-              child: Text('Login / SignUp'),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blueGrey[900],
-              ),
             ),
           ),
-        )
-      ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  PhoneAuthCredential phoneAuthCredential =
+                      PhoneAuthProvider.credential(
+                          verificationId: verificationId, smsCode: otp);
+                  signInWithPhoneAuthCredential(phoneAuthCredential);
+                },
+                child: Text('Login / SignUp'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blueGrey[900],
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -209,6 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return ScaffoldMessenger(
       key: scaffoldMessengerKey,
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: showLoading
             ? Center(
                 child: CircularProgressIndicator(),
