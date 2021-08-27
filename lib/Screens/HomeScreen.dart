@@ -3,6 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:justrest/Widgets/CustomCarousel.dart';
 import 'package:justrest/Widgets/MyDrawer.dart';
 
+const stylingAll = TextStyle(
+  fontSize: 14,
+);
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -25,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static const sizedBoxSpace = SizedBox(
     height: 12,
   );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontFamily: GoogleFonts.playfairDisplay().fontFamily,
                 fontSize: 24,
                 letterSpacing: 2.0)),
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add_shopping_cart_outlined))],
       ),
       body: SingleChildScrollView(
           child: Padding(
@@ -47,10 +53,111 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 250,
+              height: 420,
               color: Colors.white,
               child: Column(
-                children: [],
+                children: [
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Row(
+                    children: [
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/woman.png'),
+                        ),
+                        text: 'Salon For Woman',
+                      ),
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/spa.png'),
+                        ),
+                        text: 'Spa for Woman',
+                      ),
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/man.png'),
+                        ),
+                        text: 'Salon For Man',
+                      ),
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/massage.png'),
+                        ),
+                        text: 'Massage For Man',
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/ac.png'),
+                        ),
+                        text: 'AC Service & Repair',
+                      ),
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/tools.png'),
+                        ),
+                        text: 'Appliance Repair',
+                      ),
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/paint-roller.png'),
+                        ),
+                        text: 'Home Painting',
+                      ),
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/vaccum-cleaner.png'),
+                        ),
+                        text: 'Cleaning Disinfection',
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image:
+                              AssetImage('assets/images/plug-and-socket.png'),
+                        ),
+                        text: 'Electrics',
+                      ),
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/plumber-man.png'),
+                        ),
+                        text: 'Plumbers & Carpenters',
+                      ),
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/water-filter.png'),
+                        ),
+                        text: 'RO Service Repair',
+                      ),
+                      ResuableCard(
+                        image: Image(
+                          width: 40,
+                          image: AssetImage('assets/images/pesticide.png'),
+                        ),
+                        text: 'Pest Control',
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -63,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 450,
+              height: 460,
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -206,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               width: double.infinity,
-              height: 450,
+              height: 460,
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -243,7 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 sizedBoxSpace,
                                 Text(
-                                  'Air Conditioner',
+                                  'Bathroom Cleaning',
                                   style: keveryBackText,
                                 ),
                                 Text(
@@ -267,7 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 sizedBoxSpace,
                                 Text(
-                                  'Geyser',
+                                  'Full Home Cleaning',
                                   style: keveryBackText,
                                 ),
                                 Text(
@@ -298,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 sizedBoxSpace,
                                 Text(
-                                  'Water Purifier',
+                                  'sofa & carpet clean..',
                                   style: keveryBackText,
                                 ),
                                 Text(
@@ -318,11 +425,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Image(
                                   width: 180,
                                   image: NetworkImage(
-                                      'https://i.ytimg.com/vi/5Gmj47oIs1g/maxresdefault.jpg'),
+                                      'https://content.jdmagicbox.com/comp/delhi/a4/011pxx11.xx11.200214141954.a8a4/catalogue/urban-pest-control-services-delhi-0hh21vhhks.jpg?clr=2e3838'),
                                 ),
                                 sizedBoxSpace,
                                 Text(
-                                  'Washing Machine',
+                                  'Pest Control',
                                   style: keveryBackText,
                                 ),
                                 Text(
@@ -343,6 +450,35 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       )),
       drawer: MyDrawer(),
+    );
+  }
+}
+
+class ResuableCard extends StatelessWidget {
+  ResuableCard({required this.image, required this.text});
+  final Image image;
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 4,
+      child: Container(
+        width: 90,
+        height: 120,
+        child: Column(
+          children: [
+            image,
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              text,
+              style: stylingAll,
+              textAlign: TextAlign.center,
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:justrest/Screens/EditProfile.dart';
 import 'package:justrest/Screens/HomeScreen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -21,12 +23,15 @@ class _LoginScreenState extends State<LoginScreen> {
   MobileVerificationState currentState =
       MobileVerificationState.SHOW_MOBILE_FORM_STATE;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  CollectionReference users = FirebaseFirestore.instance.collection('Users');
   String verificationId = "";
   String otp = '';
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneController = TextEditingController();
   bool showLoading = false;
+
+
   void signInWithPhoneAuthCredential(
       PhoneAuthCredential phoneAuthCredential) async {
     setState(() {
@@ -41,6 +46,18 @@ class _LoginScreenState extends State<LoginScreen> {
       if (authCredential.user != null) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        users
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({
+              'fullName': 'Unknown',
+              'mobileNumber': _phoneController.text,
+              'email': "something@gmail.com",
+              'profilePicUrl': "",
+              "Uid": FirebaseAuth.instance.currentUser!.uid,
+              "Address": "unknown",
+            })
+            .then((value) => print("Successful"))
+            .catchError((error) => print("Failed to add user: $error"));
       }
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -120,7 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         setState(() {
                           showLoading = false;
                         });
-                        //signInWithPhoneAuthCredential(phoneAuthCredential);
                       },
                       verificationFailed: (verificationFailed) async {
                         setState(() {
@@ -171,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
             style: TextStyle(color: Colors.grey[600]),
           ),
           Text(
-            "+918854082108",
+            "+91" + _phoneController.text,
             style: TextStyle(fontWeight: FontWeight.w700),
           ),
           Padding(
