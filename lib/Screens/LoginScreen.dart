@@ -3,7 +3,6 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:justrest/Screens/EditProfile.dart';
 import 'package:justrest/Screens/HomeScreen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -30,7 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneController = TextEditingController();
   bool showLoading = false;
-
 
   void signInWithPhoneAuthCredential(
       PhoneAuthCredential phoneAuthCredential) async {
@@ -97,24 +95,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     enabled: false,
                   ),
                   Container(
-                      width: 130,
-                      child: TextFormField(
-                        controller: _phoneController,
-                        autofocus: true,
-                        maxLength: 10,
-                        validator: (value) {
-                          if (value!.isEmpty || value.length < 10) {
-                            return "Mobile number cannot be empty";
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          counterText: '',
-                          hintText: 'Mobile Number',
-                          //errorText: _validate ? 'Value Can\'t Be Empty' : null,
-                        ),
-                      ))
+                    width: 130,
+                    child: TextFormField(
+                      controller: _phoneController,
+                      autofocus: true,
+                      maxLength: 10,
+                      validator: (value) {
+                        if (value!.isEmpty || value.length < 10) {
+                          return "Mobile number cannot be empty";
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        counterText: '',
+                        hintText: 'Mobile Number',
+                        //errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

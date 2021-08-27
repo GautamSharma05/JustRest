@@ -1,9 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:justrest/Screens/OTPSCREEN.dart';
-import 'package:justrest/Wrapper.dart';
 
+import 'package:justrest/Wrapper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'JustRest',
         theme: ThemeData(
-          fontFamily:GoogleFonts.poppins().fontFamily,
+            fontFamily: GoogleFonts.poppins().fontFamily,
             primaryColor: Colors.blueGrey[900],
             scaffoldBackgroundColor: Colors.grey[200]),
         /*darkTheme: ThemeData(
