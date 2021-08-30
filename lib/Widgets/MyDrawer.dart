@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:justrest/Screens/AboutUs.dart';
+import 'package:justrest/Screens/EditProfile.dart';
 import 'package:justrest/Screens/HomeScreen.dart';
 import 'package:justrest/Screens/LoginScreen.dart';
 import 'package:share/share.dart';
@@ -14,23 +15,26 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  final imageUrl =
-      'https://cdn4.vectorstock.com/i/thumb-large/83/13/barber-handsome-man-with-beard-and-mustache-vector-22318313.jpg';
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
         children: [
-          DrawerHeader(
-              padding: EdgeInsets.zero,
-              child: UserAccountsDrawerHeader(
-                accountName: Text('Gautam Sharma'),
-                accountEmail: Text('gs0852963741@gmail.com'),
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: NetworkImage(imageUrl),
-                ),
-              )),
+          InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+            },
+            child: DrawerHeader(
+                padding: EdgeInsets.zero,
+                child: UserAccountsDrawerHeader(
+                  accountName: Text('Gautam Sharma'),
+                  accountEmail: Text('gs0852963741@gmail.com'),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/Avatar.png')
+                  ),
+                )),
+          ),
           ListTile(
             leading: Icon(Icons.home),
             title: Text(

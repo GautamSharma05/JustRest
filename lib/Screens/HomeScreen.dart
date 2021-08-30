@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:justrest/Widgets/CustomCarousel.dart';
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static const sizedBoxSpace = SizedBox(
     height: 12,
   );
-
+  var document = FirebaseFirestore.instance.collection("images").doc("images");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontFamily: GoogleFonts.playfairDisplay().fontFamily,
                 fontSize: 24,
                 letterSpacing: 2.0)),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add_shopping_cart_outlined))],
+        actions: [
+          IconButton(
+              onPressed: () {}, icon: Icon(Icons.add_shopping_cart_outlined))
+        ],
       ),
       body: SingleChildScrollView(
           child: Padding(
@@ -51,115 +55,23 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 20,
             ),
-            Container(
-              width: double.infinity,
-              height: 420,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Row(
-                    children: [
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/woman.png'),
-                        ),
-                        text: 'Salon For Woman',
-                      ),
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/spa.png'),
-                        ),
-                        text: 'Spa for Woman',
-                      ),
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/man.png'),
-                        ),
-                        text: 'Salon For Man',
-                      ),
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/massage.png'),
-                        ),
-                        text: 'Massage For Man',
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/ac.png'),
-                        ),
-                        text: 'AC Service & Repair',
-                      ),
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/tools.png'),
-                        ),
-                        text: 'Appliance Repair',
-                      ),
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/paint-roller.png'),
-                        ),
-                        text: 'Home Painting',
-                      ),
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/vaccum-cleaner.png'),
-                        ),
-                        text: 'Cleaning Disinfection',
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image:
-                              AssetImage('assets/images/plug-and-socket.png'),
-                        ),
-                        text: 'Electrics',
-                      ),
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/plumber-man.png'),
-                        ),
-                        text: 'Plumbers & Carpenters',
-                      ),
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/water-filter.png'),
-                        ),
-                        text: 'RO Service Repair',
-                      ),
-                      ResuableCard(
-                        image: Image(
-                          width: 40,
-                          image: AssetImage('assets/images/pesticide.png'),
-                        ),
-                        text: 'Pest Control',
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            LayoutBuilder(builder: (context, constraints) {
+              if (constraints.maxWidth < 768) {
+                return Container(
+                  width: double.infinity,
+                  height: 420,
+                  color: Colors.white,
+                  child: serviceCard(),
+                );
+              } else {
+                return Container(
+                  width: 1080,
+                  height: 420,
+                  color: Colors.white,
+                  child: serviceCard(),
+                );
+              }
+            }),
             SizedBox(
               height: 40,
             ),
@@ -168,141 +80,299 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 40,
             ),
-            Container(
-              width: double.infinity,
-              height: 460,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Appliances: Service & Repair',
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: GoogleFonts.poppins().fontFamily),
-                    ),
-                    Text(
-                      'Expert Technicians at your Doorstep in 2 hours',
-                      style: TextStyle(
-                          color: Colors.grey[700], fontWeight: FontWeight.w400),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                  width: 180,
-                                  image: NetworkImage(
-                                      'https://i.ytimg.com/vi/5Gmj47oIs1g/maxresdefault.jpg'),
-                                ),
-                                sizedBoxSpace,
-                                Text(
-                                  'Air Conditioner',
-                                  style: keveryBackText,
-                                ),
-                                Text(
-                                  'Up To 30% off',
-                                  style: keveryTextColor,
-                                ),
-                              ],
+            FutureBuilder(
+                future: document.get(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("Something went wrong");
+                  }
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    Map<String, dynamic> data =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    return LayoutBuilder(
+
+                      builder: (context, constraints) {
+                        if(constraints.maxWidth < 768){
+                          return Container(
+                            width: double.infinity,
+                            height: 470,
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Appliances: Service & Repair',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: GoogleFonts.poppins().fontFamily),
+                                  ),
+                                  Text(
+                                    'Expert Technicians at your Doorstep in 2 hours',
+                                    style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Image(
+                                                width: 180,
+                                                image:
+                                                NetworkImage(data['ASRImage1']),
+                                              ),
+                                              sizedBoxSpace,
+                                              Text(
+                                                'Air Conditioner',
+                                                style: keveryBackText,
+                                              ),
+                                              Text(
+                                                'Up To 30% off',
+                                                style: keveryTextColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Image(
+                                                width: 180,
+                                                image:
+                                                NetworkImage(data['ASRImage2']),
+                                              ),
+                                              sizedBoxSpace,
+                                              Text(
+                                                'Geyser',
+                                                style: keveryBackText,
+                                              ),
+                                              Text(
+                                                'Up To 10% off',
+                                                style: keveryTextColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Image(
+                                                width: 180,
+                                                image:
+                                                NetworkImage(data['ASRImage3']),
+                                              ),
+                                              sizedBoxSpace,
+                                              Text(
+                                                'Water Purifier',
+                                                style: keveryBackText,
+                                              ),
+                                              Text(
+                                                'Up To 45% off',
+                                                style: keveryTextColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Image(
+                                                width: 180,
+                                                image:
+                                                NetworkImage(data['ASRImage4']),
+                                              ),
+                                              sizedBoxSpace,
+                                              Text(
+                                                'Washing Machine',
+                                                style: keveryBackText,
+                                              ),
+                                              Text(
+                                                'Up To 40% off',
+                                                style: keveryTextColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                  width: 180,
-                                  image: NetworkImage(
-                                      'https://i.ytimg.com/vi/5Gmj47oIs1g/maxresdefault.jpg'),
-                                ),
-                                sizedBoxSpace,
-                                Text(
-                                  'Geyser',
-                                  style: keveryBackText,
-                                ),
-                                Text(
-                                  'Up To 10% off',
-                                  style: keveryTextColor,
-                                ),
-                              ],
+                          );
+                        }
+                        else{
+                          return Container(
+                            width: double.infinity,
+                            height: 280,
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Appliances: Service & Repair',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: GoogleFonts.poppins().fontFamily),
+                                  ),
+                                  Text(
+                                    'Expert Technicians at your Doorstep in 2 hours',
+                                    style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          children: [
+                                            Image(
+                                              width: 180,
+                                              image:
+                                              NetworkImage(data['ASRImage1']),
+                                            ),
+                                            sizedBoxSpace,
+                                            Text(
+                                              'Air Conditioner',
+                                              style: keveryBackText,
+                                            ),
+                                            Text(
+                                              'Up To 30% off',
+                                              style: keveryTextColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Image(
+                                              width: 180,
+                                              image:
+                                              NetworkImage(data['ASRImage2']),
+                                            ),
+                                            sizedBoxSpace,
+                                            Text(
+                                              'Geyser',
+                                              style: keveryBackText,
+                                            ),
+                                            Text(
+                                              'Up To 10% off',
+                                              style: keveryTextColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Image(
+                                              width: 180,
+
+                                              image:
+                                              NetworkImage(data['ASRImage3']),
+                                            ),
+                                            sizedBoxSpace,
+                                            Text(
+                                              'Water Purifier',
+                                              style: keveryBackText,
+                                            ),
+                                            Text(
+                                              'Up To 45% off',
+                                              style: keveryTextColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Image(
+                                              width: 180,
+
+                                              image:
+                                              NetworkImage(data['ASRImage4']),
+                                            ),
+                                            sizedBoxSpace,
+                                            Text(
+                                              'Washing Machine',
+                                              style: keveryBackText,
+                                            ),
+                                            Text(
+                                              'Up To 40% off',
+                                              style: keveryTextColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                  width: 180,
-                                  image: NetworkImage(
-                                      'https://i.ytimg.com/vi/5Gmj47oIs1g/maxresdefault.jpg'),
-                                ),
-                                sizedBoxSpace,
-                                Text(
-                                  'Water Purifier',
-                                  style: keveryBackText,
-                                ),
-                                Text(
-                                  'Up To 45% off',
-                                  style: keveryTextColor,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                  width: 180,
-                                  image: NetworkImage(
-                                      'https://i.ytimg.com/vi/5Gmj47oIs1g/maxresdefault.jpg'),
-                                ),
-                                sizedBoxSpace,
-                                Text(
-                                  'Washing Machine',
-                                  style: keveryBackText,
-                                ),
-                                Text(
-                                  'Up To 40% off',
-                                  style: keveryTextColor,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                          );
+                        }
+                      }
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }),
             SizedBox(
               height: 20,
             ),
@@ -311,145 +381,406 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 20,
             ),
-            Container(
-              width: double.infinity,
-              height: 460,
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Cleaning & Pest Control',
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: GoogleFonts.poppins().fontFamily),
-                    ),
-                    Text(
-                      'Remove Hard Stains & more',
-                      style: TextStyle(
-                          color: Colors.grey[700], fontWeight: FontWeight.w400),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                  width: 180,
-                                  image: NetworkImage(
-                                      'https://i.ytimg.com/vi/5Gmj47oIs1g/maxresdefault.jpg'),
-                                ),
-                                sizedBoxSpace,
-                                Text(
-                                  'Bathroom Cleaning',
-                                  style: keveryBackText,
-                                ),
-                                Text(
-                                  'Up To 30% off',
-                                  style: keveryTextColor,
-                                ),
-                              ],
+            FutureBuilder(
+                future: document.get(),
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text("Something went wrong");
+                  }
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    Map<String, dynamic> data =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    return LayoutBuilder(
+
+                      builder: (context, constraints) {
+                        if(constraints.maxWidth < 768){
+                          return Container(
+                            width: double.infinity,
+                            height: 470,
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Cleaning & Pest Control',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: GoogleFonts.poppins().fontFamily),
+                                  ),
+                                  Text(
+                                    'Remove Hard Stains & more',
+                                    style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Image(
+                                                width: 180,
+                                                image:
+                                                NetworkImage(data['CPCImage1']),
+                                              ),
+                                              sizedBoxSpace,
+                                              Text(
+                                                'Bathroom Cleaning',
+                                                style: keveryBackText,
+                                              ),
+                                              Text(
+                                                'Up To 30% off',
+                                                style: keveryTextColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Image(
+                                                width: 180,
+                                                image:
+                                                NetworkImage(data['CPCImage2']),
+                                              ),
+                                              sizedBoxSpace,
+                                              Text(
+                                                'Full Home Cleaning',
+                                                style: keveryBackText,
+                                              ),
+                                              Text(
+                                                'Up To 10% off',
+                                                style: keveryTextColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Image(
+                                                width: 180,
+                                                image:
+                                                NetworkImage(data['CPCImage3']),
+                                              ),
+                                              sizedBoxSpace,
+                                              Text(
+                                                'sofa & carpet clean..',
+                                                style: keveryBackText,
+                                              ),
+                                              Text(
+                                                'Up To 45% off',
+                                                style: keveryTextColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Image(
+                                                width: 180,
+                                                image:
+                                                NetworkImage(data['CPCImage4']),
+                                              ),
+                                              sizedBoxSpace,
+                                              Text(
+                                                'Pest Control',
+                                                style: keveryBackText,
+                                              ),
+                                              Text(
+                                                'Up To 40% off',
+                                                style: keveryTextColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                  width: 180,
-                                  image: NetworkImage(
-                                      'https://i.ytimg.com/vi/5Gmj47oIs1g/maxresdefault.jpg'),
-                                ),
-                                sizedBoxSpace,
-                                Text(
-                                  'Full Home Cleaning',
-                                  style: keveryBackText,
-                                ),
-                                Text(
-                                  'Up To 10% off',
-                                  style: keveryTextColor,
-                                ),
-                              ],
+                          );
+                        }
+                        else{
+                          return Container(
+                            width: double.infinity,
+                            height: 280,
+                            color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Appliances: Service & Repair',
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: GoogleFonts.poppins().fontFamily),
+                                  ),
+                                  Text(
+                                    'Expert Technicians at your Doorstep in 2 hours',
+                                    style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          children: [
+                                            Image(
+                                              width: 180,
+                                              image:
+                                              NetworkImage(data['ASRImage1']),
+                                            ),
+                                            sizedBoxSpace,
+                                            Text(
+                                              'Air Conditioner',
+                                              style: keveryBackText,
+                                            ),
+                                            Text(
+                                              'Up To 30% off',
+                                              style: keveryTextColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Image(
+                                              width: 180,
+                                              image:
+                                              NetworkImage(data['ASRImage2']),
+                                            ),
+                                            sizedBoxSpace,
+                                            Text(
+                                              'Geyser',
+                                              style: keveryBackText,
+                                            ),
+                                            Text(
+                                              'Up To 10% off',
+                                              style: keveryTextColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Image(
+                                              width: 180,
+                                              image:
+                                              NetworkImage(data['ASRImage3']),
+                                            ),
+                                            sizedBoxSpace,
+                                            Text(
+                                              'Water Purifier',
+                                              style: keveryBackText,
+                                            ),
+                                            Text(
+                                              'Up To 45% off',
+                                              style: keveryTextColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Image(
+                                              width: 180,
+                                              image:
+                                              NetworkImage(data['ASRImage4']),
+                                            ),
+                                            sizedBoxSpace,
+                                            Text(
+                                              'Washing Machine',
+                                              style: keveryBackText,
+                                            ),
+                                            Text(
+                                              'Up To 40% off',
+                                              style: keveryTextColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                  width: 180,
-                                  image: NetworkImage(
-                                      'https://i.ytimg.com/vi/5Gmj47oIs1g/maxresdefault.jpg'),
-                                ),
-                                sizedBoxSpace,
-                                Text(
-                                  'sofa & carpet clean..',
-                                  style: keveryBackText,
-                                ),
-                                Text(
-                                  'Up To 45% off',
-                                  style: keveryTextColor,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image(
-                                  width: 180,
-                                  image: NetworkImage(
-                                      'https://content.jdmagicbox.com/comp/delhi/a4/011pxx11.xx11.200214141954.a8a4/catalogue/urban-pest-control-services-delhi-0hh21vhhks.jpg?clr=2e3838'),
-                                ),
-                                sizedBoxSpace,
-                                Text(
-                                  'Pest Control',
-                                  style: keveryBackText,
-                                ),
-                                Text(
-                                  'Up To 40% off',
-                                  style: keveryTextColor,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                          );
+                        }
+                      }
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }),
           ],
         ),
       )),
       drawer: MyDrawer(),
+    );
+  }
+
+  Column serviceCard() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 40,
+        ),
+        Row(
+          children: [
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/woman.png'),
+              ),
+              text: 'Salon For Woman',
+            ),
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/spa.png'),
+              ),
+              text: 'Spa for Woman',
+            ),
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/man.png'),
+              ),
+              text: 'Salon For Man',
+            ),
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/massage.png'),
+              ),
+              text: 'Massage For Man',
+            )
+          ],
+        ),
+        Row(
+          children: [
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/ac.png'),
+              ),
+              text: 'AC Service & Repair',
+            ),
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/tools.png'),
+              ),
+              text: 'Appliance Repair',
+            ),
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/paint-roller.png'),
+              ),
+              text: 'Home Painting',
+            ),
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/vaccum-cleaner.png'),
+              ),
+              text: 'Cleaning Disinfection',
+            )
+          ],
+        ),
+        Row(
+          children: [
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/plug-and-socket.png'),
+              ),
+              text: 'Electrics',
+            ),
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/plumber-man.png'),
+              ),
+              text: 'Plumbers & Carpenters',
+            ),
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/water-filter.png'),
+              ),
+              text: 'RO Service Repair',
+            ),
+            ResuableCard(
+              image: Image(
+                width: 40,
+                image: AssetImage('assets/images/pesticide.png'),
+              ),
+              text: 'Pest Control',
+            )
+          ],
+        ),
+      ],
     );
   }
 }

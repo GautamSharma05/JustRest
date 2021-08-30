@@ -192,6 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: PinCodeTextField(
+              keyboardType: TextInputType.phone,
               appContext: context,
               length: 6,
               onChanged: (value) {},
