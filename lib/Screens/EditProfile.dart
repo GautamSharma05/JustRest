@@ -33,13 +33,10 @@ class _EditProfileState extends State<EditProfile> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
-
             sizedBox,
             CircleAvatar(
-              radius: 80.0,
-              backgroundImage: AssetImage('assets/images/Avatar.png')
-            ),
+                radius: 80.0,
+                backgroundImage: AssetImage('assets/images/Avatar.png')),
             sizedBox,
             Padding(
               padding: const EdgeInsets.all(30.0),
@@ -80,17 +77,15 @@ class _EditProfileState extends State<EditProfile> {
                 Container(
                   width: 150,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.blueGrey[900]),
+                    style:
+                        ElevatedButton.styleFrom(primary: Colors.blueGrey[900]),
                     child: Text(
                       'Cancel',
                       style: TextStyle(
                         fontSize: 20,
                       ),
                     ),
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                   ),
                 ),
                 SizedBox(
@@ -99,8 +94,8 @@ class _EditProfileState extends State<EditProfile> {
                 Container(
                   width: 150,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.blueGrey[900]),
+                    style:
+                        ElevatedButton.styleFrom(primary: Colors.blueGrey[900]),
                     child: Text(
                       'Save',
                       style: TextStyle(
