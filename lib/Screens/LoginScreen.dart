@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:justrest/Screens/HomeScreen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -19,8 +19,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  MobileVerificationState currentState =
-      MobileVerificationState.SHOW_MOBILE_FORM_STATE;
+  MobileVerificationState currentState = MobileVerificationState.SHOW_MOBILE_FORM_STATE;
   FirebaseAuth _auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
   String verificationId = "";
@@ -30,20 +29,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _phoneController = TextEditingController();
   bool showLoading = false;
 
-  void signInWithPhoneAuthCredential(
-      PhoneAuthCredential phoneAuthCredential) async {
+  void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) async {
     setState(() {
       showLoading = true;
     });
     try {
-      final authCredential =
-          await _auth.signInWithCredential(phoneAuthCredential);
+      final authCredential = await _auth.signInWithCredential(phoneAuthCredential);
       setState(() {
         showLoading = false;
       });
       if (authCredential.user != null) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
         users
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .set({
@@ -142,15 +138,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           showLoading = false;
                         });
                         scaffoldMessengerKey.currentState!.showSnackBar(
-                            SnackBar(
-                                content: Text(
-                                    (verificationFailed.message).toString())));
+                            SnackBar(content: Text((verificationFailed.message).toString())));
                       },
                       codeSent: (verificationId, resendToken) {
                         setState(() {
                           showLoading = false;
-                          currentState =
-                              MobileVerificationState.SHOW_OTP_FORM_STATE;
+                          currentState = MobileVerificationState.SHOW_OTP_FORM_STATE;
                           this.verificationId = verificationId;
                         });
                       },
@@ -216,8 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   PhoneAuthCredential phoneAuthCredential =
-                      PhoneAuthProvider.credential(
-                          verificationId: verificationId, smsCode: otp);
+                      PhoneAuthProvider.credential(verificationId: verificationId, smsCode: otp);
                   signInWithPhoneAuthCredential(phoneAuthCredential);
                 },
                 child: Text('Login / SignUp'),
